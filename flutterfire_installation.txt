@@ -1,0 +1,12 @@
+As per process described at:
+https://firebase.google.com/docs/flutter/setup?hl=ru&platform=android
+
+1. download and start firebase_cli.exe
+(download link: https://firebase.google.com/docs/cli?hl=ru#setup_update_cli
+or use firebase_cli.exe in that directory)
+
+2. log in with command: firebase login
+
+3. in CLI, execute command: dart pub global activate flutterfire_cli
+
+4. add flutterfire installed path to Windows PATH variable
