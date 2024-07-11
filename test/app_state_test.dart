@@ -82,11 +82,11 @@ void main() {
     'modifying entries',
     () async {
       await appState.initialize();
-      await appState.modifyEntries(
+      await appState.modifyEntryIsDone(
         entryId: mockEntry1Id,
         isDone: false,
       );
-      await appState.modifyEntries(
+      await appState.modifyEntryIsDone(
         entryId: mockEntry2Id,
         isDone: true,
       );
@@ -133,7 +133,7 @@ void main() {
       await appState.initialize();
       final count = appState.entries.length;
       final entry = appState.entries.first;
-      final deleted = await appState.delete(entry);
+      final deleted = await appState.deleteEntry(entry);
       deleted.expectTrue();
       expect(
         appState.entries.length,
@@ -180,7 +180,7 @@ void main() {
       entry.imageData.expectNull();
 
       // fake image upload for entry
-      final couldUploadImage = await appState.upload(
+      final couldUploadImage = await appState.uploadEntryImage(
         filePath: 'dummy_path',
         forEntryId: entry.id,
       );

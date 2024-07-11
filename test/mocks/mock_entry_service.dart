@@ -82,9 +82,10 @@ class MockEntriesService implements EntriesService {
 
   @override
   Future<void> modifyEntry({
-    required EntryId entryId,
-    required bool isDone,
     required String userId,
+    required EntryId entryId,
+    String? entryText,
+    bool? isDone,
   }) =>
       Future.delayed(oneSecond);
 
@@ -104,14 +105,15 @@ class MockEntriesService implements EntriesService {
   }
 
   @override
-  Future<void> setEntryHasImage({
+  Future<void> setEntryHasImageOrNot({
     required EntryId entryId,
     required String userId,
+    required bool hasImage,
   }) async {
     mockEntrys
         .firstWhere(
           (element) => element.id == entryId,
         )
-        .hasImage = true;
+        .hasImage = hasImage;
   }
 }

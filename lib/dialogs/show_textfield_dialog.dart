@@ -18,28 +18,40 @@ Future<String?> showTextFieldDialog({
   required String title,
   required String? hintText,
   required DialogOptionBuilder optionsBuilder,
+  isTextEdit = false,
+  oldText = '',
 }) {
   controller.clear();
   final options = optionsBuilder();
+
+  if (isTextEdit) controller.text = oldText;
 
   return showDialog<String?>(
     context: context,
     builder: (context) {
       return AlertDialog(
         title: Text(title),
-        content: TextField(
-          autofocus: true,
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText,
-          ),
-        ),
+        content: isTextEdit
+            ? TextField(
+                autofocus: true,
+                controller: controller,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+              )
+            : TextField(
+                autofocus: true,
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                ),
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+              ),
         actions: options.entries
             .map(
               (option) => TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(
-                    //TODO: check
                     option.key == TextFieldDialogButtonType.confirm
                         ? controller.text
                         : null,

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/auth/auth_error.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/services/auth_service.dart';
-import 'package:iu_dlbcsemse02_task3_journal_app/services/image_upload_service.dart';
+import 'package:iu_dlbcsemse02_task3_journal_app/services/image_actions_service.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/services/entries_service.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/state/entry.dart';
 
@@ -17,7 +17,7 @@ class AppState = _AppState with _$AppState;
 abstract class _AppState with Store {
   final AuthService authService;
   final EntriesService entriesService;
-  final ImageUploadService imageUploadService;
+  final ImageService imageUploadService;
 
   /// constructor
   _AppState({
@@ -63,84 +63,6 @@ abstract class _AppState with Store {
     currentScreen = screen;
   }
 
-  /// delete entry action
-  @action
-  Future<bool> delete(
-    Entry entry,
-  ) async {
-    isLoading = true;
-
-    final userId = authService.userId;
-    if (userId == null) {
-      isLoading = false;
-      return false;
-    }
-
-    try {
-      // remote delete
-      await entriesService.deleteEntryById(
-        entry.id,
-        userId: userId,
-      );
-      // local delete
-      entries.removeWhere(
-        (element) => element.id == entry.id,
-      );
-
-      return true;
-    } catch (_) {
-      return false;
-    } finally {
-      isLoading = false;
-    }
-  }
-
-  /// delete user account action
-  @action
-  Future<bool> deleteAccount() async {
-    isLoading = true;
-
-    final userId = authService.userId;
-    if (userId == null) {
-      isLoading = false;
-      return false;
-    }
-
-    try {
-      // remote delete all user`s docs
-      await entriesService.deleteAllEntries(
-        userId: userId,
-      );
-
-      // local delete all docs
-      entries.clear();
-
-      // delete acc & sign out
-      await authService.deleteAccountAndSignOut();
-
-      // changing screen to Login
-      currentScreen = AppScreen.login;
-      return true;
-    } on AuthError catch (e) {
-      authError = e;
-      return false;
-    } catch (_) {
-      return false;
-    } finally {
-      isLoading = false;
-    }
-  }
-
-  /// log out user action
-  @action
-  Future<void> logOut() async {
-    isLoading = true;
-    await authService.signOut();
-    entries.clear();
-    isLoading = false;
-    currentScreen = AppScreen.login;
-  }
-
   /// create Entry action
   @action
   Future<bool> createEntry(String text) async {
@@ -177,9 +99,9 @@ abstract class _AppState with Store {
     return true;
   }
 
-  /// modify entry action
+  /// modify entry isDone action
   @action
-  Future<bool> modifyEntries({
+  Future<bool> modifyEntryIsDone({
     required EntryId entryId,
     required bool isDone,
   }) async {
@@ -200,6 +122,33 @@ abstract class _AppState with Store {
           (element) => element.id == entryId,
         )
         .isDone = isDone;
+
+    return true;
+  }
+
+  /// modify entry isDone action
+  @action
+  Future<bool> modifyEntryText({
+    required EntryId entryId,
+    required String text,
+  }) async {
+    final userId = authService.userId;
+    if (userId == null) {
+      return false;
+    }
+
+    await entriesService.modifyEntry(
+      entryId: entryId,
+      entryText: text,
+      userId: userId,
+    );
+
+    // update the local entry
+    entries
+        .firstWhere(
+          (element) => element.id == entryId,
+        )
+        .text = text;
 
     return true;
   }
@@ -286,7 +235,7 @@ abstract class _AppState with Store {
       );
 
   @action
-  Future<bool> upload({
+  Future<bool> uploadEntryImage({
     required String filePath,
     required EntryId forEntryId,
   }) async {
@@ -301,7 +250,7 @@ abstract class _AppState with Store {
     );
     entry.isLoading = true;
 
-    final imageId = await imageUploadService.uploadImage(
+    final imageId = await imageUploadService.uploadImageToRemote(
       userId: userId,
       imageId: forEntryId,
       filePath: filePath,
@@ -313,13 +262,53 @@ abstract class _AppState with Store {
       return false;
     }
 
-    await entriesService.setEntryHasImage(
+    await entriesService.setEntryHasImageOrNot(
       entryId: forEntryId,
       userId: userId,
+      hasImage: true,
     );
 
     entry.isLoading = false;
     entry.hasImage = true;
+    return true;
+  }
+
+  @action
+  Future<bool> removeEntryMedia({
+    required EntryId forEntryId,
+  }) async {
+    final userId = authService.userId;
+    if (userId == null) {
+      return false;
+    }
+
+    //set the entry as loading while removing the image
+    final entry = entries.firstWhere(
+      (element) => element.id == forEntryId,
+    );
+    entry.isLoading = true;
+
+    // update the local entry
+    entries.firstWhere(
+      (element) => element.id == forEntryId,
+    )
+      ..hasImage = false
+      ..imageData = null;
+
+    // remove from remote
+    imageUploadService.removeImageFromRemote(
+      userId: userId,
+      entryId: forEntryId,
+    );
+
+    // update remote entry, set hasImage = false
+    await entriesService.setEntryHasImageOrNot(
+      entryId: forEntryId,
+      userId: userId,
+      hasImage: false,
+    );
+
+    entry.isLoading = false;
     return true;
   }
 
@@ -348,6 +337,85 @@ abstract class _AppState with Store {
     );
     entry.imageData = image;
     return image;
+  }
+
+  /// delete entry action
+  @action
+  Future<bool> deleteEntry(
+    Entry entry,
+  ) async {
+    isLoading = true;
+
+    final userId = authService.userId;
+    if (userId == null) {
+      isLoading = false;
+      return false;
+    }
+
+    try {
+      // local delete
+      entries.removeWhere(
+        (element) => element.id == entry.id,
+      );
+
+      // remote delete
+      await entriesService.deleteEntryById(
+        entry.id,
+        userId: userId,
+      );
+
+      return true;
+    } catch (_) {
+      return false;
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  /// delete user account action
+  @action
+  Future<bool> deleteAccount() async {
+    isLoading = true;
+
+    final userId = authService.userId;
+    if (userId == null) {
+      isLoading = false;
+      return false;
+    }
+
+    try {
+      // local delete all docs
+      entries.clear();
+
+      // remote delete all user`s docs
+      await entriesService.deleteAllEntries(
+        userId: userId,
+      );
+
+      // delete acc & sign out
+      await authService.deleteAccountAndSignOut();
+
+      // changing screen to Login
+      currentScreen = AppScreen.login;
+      return true;
+    } on AuthError catch (e) {
+      authError = e;
+      return false;
+    } catch (_) {
+      return false;
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  /// log out user action
+  @action
+  Future<void> logOut() async {
+    isLoading = true;
+    await authService.signOut();
+    entries.clear();
+    isLoading = false;
+    currentScreen = AppScreen.login;
   }
 }
 

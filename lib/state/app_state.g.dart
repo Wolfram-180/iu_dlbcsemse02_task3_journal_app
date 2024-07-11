@@ -80,30 +80,6 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
-  late final _$deleteAsyncAction =
-      AsyncAction('_AppState.delete', context: context);
-
-  @override
-  Future<bool> delete(Entry entry) {
-    return _$deleteAsyncAction.run(() => super.delete(entry));
-  }
-
-  late final _$deleteAccountAsyncAction =
-      AsyncAction('_AppState.deleteAccount', context: context);
-
-  @override
-  Future<bool> deleteAccount() {
-    return _$deleteAccountAsyncAction.run(() => super.deleteAccount());
-  }
-
-  late final _$logOutAsyncAction =
-      AsyncAction('_AppState.logOut', context: context);
-
-  @override
-  Future<void> logOut() {
-    return _$logOutAsyncAction.run(() => super.logOut());
-  }
-
   late final _$createEntryAsyncAction =
       AsyncAction('_AppState.createEntry', context: context);
 
@@ -112,13 +88,24 @@ mixin _$AppState on _AppState, Store {
     return _$createEntryAsyncAction.run(() => super.createEntry(text));
   }
 
-  late final _$modifyEntriesAsyncAction =
-      AsyncAction('_AppState.modifyEntries', context: context);
+  late final _$modifyEntryIsDoneAsyncAction =
+      AsyncAction('_AppState.modifyEntryIsDone', context: context);
 
   @override
-  Future<bool> modifyEntries({required String entryId, required bool isDone}) {
-    return _$modifyEntriesAsyncAction
-        .run(() => super.modifyEntries(entryId: entryId, isDone: isDone));
+  Future<bool> modifyEntryIsDone(
+      {required String entryId, required bool isDone}) {
+    return _$modifyEntryIsDoneAsyncAction
+        .run(() => super.modifyEntryIsDone(entryId: entryId, isDone: isDone));
+  }
+
+  late final _$modifyEntryTextAsyncAction =
+      AsyncAction('_AppState.modifyEntryText', context: context);
+
+  @override
+  Future<bool> modifyEntryText(
+      {required String entryId, required String text}) {
+    return _$modifyEntryTextAsyncAction
+        .run(() => super.modifyEntryText(entryId: entryId, text: text));
   }
 
   late final _$initializeAsyncAction =
@@ -149,13 +136,47 @@ mixin _$AppState on _AppState, Store {
         () => super._registerOrLogin(fn: fn, email: email, password: password));
   }
 
-  late final _$uploadAsyncAction =
-      AsyncAction('_AppState.upload', context: context);
+  late final _$uploadEntryImageAsyncAction =
+      AsyncAction('_AppState.uploadEntryImage', context: context);
 
   @override
-  Future<bool> upload({required String filePath, required String forEntryId}) {
-    return _$uploadAsyncAction
-        .run(() => super.upload(filePath: filePath, forEntryId: forEntryId));
+  Future<bool> uploadEntryImage(
+      {required String filePath, required String forEntryId}) {
+    return _$uploadEntryImageAsyncAction.run(() =>
+        super.uploadEntryImage(filePath: filePath, forEntryId: forEntryId));
+  }
+
+  late final _$removeEntryMediaAsyncAction =
+      AsyncAction('_AppState.removeEntryMedia', context: context);
+
+  @override
+  Future<bool> removeEntryMedia({required String forEntryId}) {
+    return _$removeEntryMediaAsyncAction
+        .run(() => super.removeEntryMedia(forEntryId: forEntryId));
+  }
+
+  late final _$deleteEntryAsyncAction =
+      AsyncAction('_AppState.deleteEntry', context: context);
+
+  @override
+  Future<bool> deleteEntry(Entry entry) {
+    return _$deleteEntryAsyncAction.run(() => super.deleteEntry(entry));
+  }
+
+  late final _$deleteAccountAsyncAction =
+      AsyncAction('_AppState.deleteAccount', context: context);
+
+  @override
+  Future<bool> deleteAccount() {
+    return _$deleteAccountAsyncAction.run(() => super.deleteAccount());
+  }
+
+  late final _$logOutAsyncAction =
+      AsyncAction('_AppState.logOut', context: context);
+
+  @override
+  Future<void> logOut() {
+    return _$logOutAsyncAction.run(() => super.logOut());
   }
 
   late final _$_AppStateActionController =

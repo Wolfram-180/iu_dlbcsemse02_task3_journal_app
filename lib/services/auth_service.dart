@@ -18,9 +18,8 @@ abstract class AuthService {
 }
 
 class FirebaseAuthService implements AuthService {
-  @override
-
   /// delete account and sign out
+  @override
   Future<bool> deleteAccountAndSignOut() async {
     final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
@@ -40,9 +39,8 @@ class FirebaseAuthService implements AuthService {
     }
   }
 
-  @override
-
   /// user log in, based on signInWithEmailAndPassword (FirebaseAuth)
+  @override
   Future<bool> login({
     required String email,
     required String password,
@@ -60,9 +58,8 @@ class FirebaseAuthService implements AuthService {
     return FirebaseAuth.instance.currentUser != null;
   }
 
-  @override
-
   /// user log in, based on createUserWithEmailAndPassword (FirebaseAuth)
+  @override
   Future<bool> register({
     required String email,
     required String password,

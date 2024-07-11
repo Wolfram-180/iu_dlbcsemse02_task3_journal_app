@@ -25,9 +25,10 @@ abstract class EntriesService {
   });
 
   Future<void> modifyEntry({
-    required EntryId entryId,
-    required bool isDone,
     required String userId,
+    required EntryId entryId,
+    String? entryText,
+    bool? isDone,
   });
 
   /// load all entries by specified user
@@ -36,9 +37,10 @@ abstract class EntriesService {
   });
 
   /// set flag entry has image assigned
-  Future<void> setEntryHasImage({
+  Future<void> setEntryHasImageOrNot({
     required EntryId entryId,
     required String userId,
+    required bool hasImage,
   });
 
   Future<Uint8List?> getEntryImage({
@@ -174,15 +176,29 @@ class FirestoreEntriesService implements EntriesService {
   Future<void> modifyEntry({
     required String userId,
     required EntryId entryId,
-    required bool isDone,
-  }) =>
+    String? entryText,
+    bool? isDone,
+  }) async {
+    if (isDone != null) {
       _modify(
-        entryId: entryId,
         userId: userId,
+        entryId: entryId,
         keyValues: {
           _DocumentKeys.isDone: isDone,
         },
       );
+    }
+
+    if (entryText != null) {
+      _modify(
+        userId: userId,
+        entryId: entryId,
+        keyValues: {
+          _DocumentKeys.text: entryText,
+        },
+      );
+    }
+  }
 
   /// image object getter from FirebaseStorage
   @override
@@ -199,17 +215,18 @@ class FirestoreEntriesService implements EntriesService {
     }
   }
 
-  /// set hasImage=true by entry in Firebase
+  /// set/unset hasImage flag by entry in Firebase
   @override
-  Future<void> setEntryHasImage({
+  Future<void> setEntryHasImageOrNot({
     required EntryId entryId,
     required String userId,
+    required bool hasImage,
   }) =>
       _modify(
         entryId: entryId,
         userId: userId,
         keyValues: {
-          _DocumentKeys.hasImage: true,
+          _DocumentKeys.hasImage: hasImage,
         },
       );
 }

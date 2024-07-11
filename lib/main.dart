@@ -6,7 +6,7 @@ import 'package:iu_dlbcsemse02_task3_journal_app/dialogs/show_auth_error.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/firebase_options.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/loading/loading_screen.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/services/auth_service.dart';
-import 'package:iu_dlbcsemse02_task3_journal_app/services/image_upload_service.dart';
+import 'package:iu_dlbcsemse02_task3_journal_app/services/image_actions_service.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/services/entries_service.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/state/app_state.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/views/login_view.dart';
@@ -24,7 +24,7 @@ void main() async {
       create: (_) => AppState(
         authService: FirebaseAuthService(),
         entriesService: FirestoreEntriesService(),
-        imageUploadService: FirebaseImageUploadService(),
+        imageUploadService: FirebaseImageService(),
       )..initialize(),
       child: const App(),
     ),
