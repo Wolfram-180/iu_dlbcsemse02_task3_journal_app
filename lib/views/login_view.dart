@@ -10,11 +10,11 @@ class LoginView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final emailController = useTextEditingController(
-      text: 'foobar@gmail.com'.ifDebugging,
+      text: 'sergei.ulvis@gmail.com'.ifDebugging,
     );
 
     final passwordController = useTextEditingController(
-      text: 'foobarbaz'.ifDebugging,
+      text: 'dabracababra'.ifDebugging,
     );
 
     return Scaffold(
@@ -26,6 +26,7 @@ class LoginView extends HookWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: emailController,
@@ -35,6 +36,9 @@ class LoginView extends HookWidget {
               keyboardType: TextInputType.emailAddress,
               keyboardAppearance: Brightness.dark,
             ),
+            const SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: passwordController,
               decoration: const InputDecoration(
@@ -43,6 +47,9 @@ class LoginView extends HookWidget {
               keyboardAppearance: Brightness.dark,
               obscureText: true,
               obscuringCharacter: '*',
+            ),
+            const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               child: const Text('Log in'),
@@ -54,6 +61,9 @@ class LoginView extends HookWidget {
                       password: password,
                     );
               },
+            ),
+            const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               child: const Text('Not registered yet? Register here!'),

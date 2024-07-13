@@ -26,6 +26,7 @@ class RegisterView extends HookWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: emailController,
@@ -35,6 +36,9 @@ class RegisterView extends HookWidget {
               keyboardType: TextInputType.emailAddress,
               keyboardAppearance: Brightness.dark,
             ),
+            const SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: passwordController,
               decoration: const InputDecoration(
@@ -43,6 +47,9 @@ class RegisterView extends HookWidget {
               keyboardAppearance: Brightness.dark,
               obscureText: true,
               obscuringCharacter: '*',
+            ),
+            const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               child: const Text('Register'),
@@ -54,6 +61,9 @@ class RegisterView extends HookWidget {
                       password: password,
                     );
               },
+            ),
+            const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               child: const Text('Already registered? Log in here!'),

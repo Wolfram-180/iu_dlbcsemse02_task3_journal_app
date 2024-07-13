@@ -12,30 +12,30 @@ class EntriesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Journal entries'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final EntryText = await showTextFieldDialog(
-                context: context,
-                title: 'What is entry about?',
-                hintText: 'Enter your journal entry here',
-                optionsBuilder: () => {
-                  TextFieldDialogButtonType.cancel: 'Cancel',
-                  TextFieldDialogButtonType.confirm: 'Save',
-                },
-              );
-              if (EntryText == null) {
-                return;
-              }
-              context.read<AppState>().createEntry(EntryText);
-            },
-            icon: const Icon(
-              Icons.add,
-            ),
-          ),
-          const MainPopupMenuButton(),
+        title: const Text('ToDo-s journal entries'),
+        actions: const [
+          MainPopupMenuButton(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
+        tooltip: 'Add entry',
+        onPressed: () async {
+          final entryText = await showTextFieldDialog(
+            context: context,
+            title: 'What is entry about?',
+            hintText: 'Enter your journal entry here',
+            optionsBuilder: () => {
+              TextFieldDialogButtonType.cancel: 'Cancel',
+              TextFieldDialogButtonType.confirm: 'Save',
+            },
+          );
+          if (entryText == null) {
+            return;
+          }
+          context.read<AppState>().createEntry(entryText);
+        },
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       body: const EntriesListView(),
     );
