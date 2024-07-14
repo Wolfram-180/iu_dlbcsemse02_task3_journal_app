@@ -37,11 +37,14 @@ abstract class _AppState with Store {
   @observable
   bool isLoading = false;
 
-  /// any auth error ?
+  /// that observable monitors all implementations of AuthError
   @observable
   AuthError? authError;
 
-  /// list of journal`s entries
+  /// The ObservableList tracks the various
+  /// read-methods (eg: [List.first], [List.last]) and
+  /// write-methods (eg: [List.add], [List.insert]) making it easier to use it inside reactions.
+  /// here we have list of journal`s entries
   @observable
   ObservableList<Entry> entries = ObservableList<Entry>();
 
@@ -54,7 +57,9 @@ abstract class _AppState with Store {
         entries.sorted(),
       );
 
-  /// in MobX, action marks a method as an action that will modify the state
+  /// in MobX, action marks a method as an action that will modify the observable properties
+  /// if method is not marked as action - observable modification from non-"action" method
+  /// will raise runtime exception
   ///
   /// goTo action change currentScreen observable to provided AppScreen
   /// to support routing

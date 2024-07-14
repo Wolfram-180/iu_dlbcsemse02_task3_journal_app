@@ -1,6 +1,7 @@
 import 'package:iu_dlbcsemse02_task3_journal_app/services/auth_service.dart';
 import '../utils.dart';
 
+/// mock auth service to emulate auth operations
 class MockAuthService implements AuthService {
   @override
   Future<bool> deleteAccountAndSignOut() => true.toFuture(

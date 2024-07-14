@@ -5,10 +5,11 @@ import 'package:iu_dlbcsemse02_task3_journal_app/state/entry.dart';
 
 import '../utils.dart';
 
+/// mock entry 1
 final mockEntry1DateTime = DateTime(
   2024,
   7,
-  11,
+  14,
   1,
   1,
   1,
@@ -25,10 +26,11 @@ final mockEntry1 = Entry(
   hasImage: false,
 );
 
+/// mock entry 2
 final mockEntry2DateTime = DateTime(
   2024,
   7,
-  11,
+  14,
   2,
   2,
   2,
@@ -52,6 +54,7 @@ final Iterable<Entry> mockEntrys = [
 
 const mockEntryId = 'mockEntryId';
 
+/// mock service to emulate entries operations
 class MockEntriesService implements EntriesService {
   @override
   Future<EntryId> createEntry({
