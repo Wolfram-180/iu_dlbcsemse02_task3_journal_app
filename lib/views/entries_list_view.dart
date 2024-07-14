@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 final _imagePicker = ImagePicker();
 
+/// main screen widget displaying list of entries
 class EntriesListView extends StatelessWidget {
   const EntriesListView({super.key});
 
@@ -32,6 +33,7 @@ class EntriesListView extends StatelessWidget {
   }
 }
 
+/// ebtry widget
 class EntryTile extends StatelessWidget {
   final int entryIndex;
   final ImagePicker imagePicker;
@@ -104,7 +106,7 @@ class EntryTile extends StatelessWidget {
                             Icons.remove_red_eye,
                           ),
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                   entry.hasImage
                       ? IconButton(
                           tooltip: 'Remove media',
@@ -180,6 +182,7 @@ class EntryTile extends StatelessWidget {
   }
 }
 
+/// image widget used in pop-up showDialog
 class EntryImageView extends StatelessWidget {
   final int entryIndex;
   final bool isPopup;

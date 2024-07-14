@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/extensions/if_debugging.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/state/app_state.dart';
 
+/// user registration screen
 class RegisterView extends HookWidget {
   const RegisterView({super.key});
 

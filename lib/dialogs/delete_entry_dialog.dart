@@ -1,7 +1,7 @@
 import 'package:iu_dlbcsemse02_task3_journal_app/dialogs/generic_dialog.dart';
 import 'package:flutter/material.dart' show BuildContext;
 
-/// dialog widget used in journal entry deletion;
+/// dialog widget used for Journal entry deletion;
 /// based on generic dialog widget
 Future<bool> showDeleteEntryDialog(BuildContext context) {
   return showGenericDialog<bool>(

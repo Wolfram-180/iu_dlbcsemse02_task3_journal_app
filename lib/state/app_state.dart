@@ -110,7 +110,7 @@ abstract class _AppState with Store {
       return false;
     }
 
-    await entriesService.modifyEntry(
+    await entriesService.updateEntry(
       entryId: entryId,
       isDone: isDone,
       userId: userId,
@@ -137,7 +137,7 @@ abstract class _AppState with Store {
       return false;
     }
 
-    await entriesService.modifyEntry(
+    await entriesService.updateEntry(
       entryId: entryId,
       entryText: text,
       userId: userId,
@@ -153,6 +153,9 @@ abstract class _AppState with Store {
     return true;
   }
 
+  /// app screen initialization
+  /// if user logged in - loading entries and routing to entries screen
+  /// otherwise (user not logged in) - routing to login screen
   @action
   Future<void> initialize() async {
     isLoading = true;
@@ -166,6 +169,7 @@ abstract class _AppState with Store {
     isLoading = false;
   }
 
+  /// load entries using entriesService
   @action
   Future<bool> _loadEntries() async {
     final userId = authService.userId;
@@ -181,6 +185,10 @@ abstract class _AppState with Store {
     return true;
   }
 
+  /// register or login function
+  /// used for both register or login wrappers
+  /// receiving function as parameter
+  /// if success - entries loaded
   @action
   Future<bool> _registerOrLogin({
     required LoginOrRegisterFunction fn,
@@ -212,6 +220,7 @@ abstract class _AppState with Store {
     }
   }
 
+  /// register wrapper using _registerOrLogin function
   @action
   Future<bool> register({
     required String email,
@@ -223,6 +232,7 @@ abstract class _AppState with Store {
         password: password,
       );
 
+  /// login wrapper using _registerOrLogin function
   @action
   Future<bool> login({
     required String email,
@@ -234,6 +244,7 @@ abstract class _AppState with Store {
         password: password,
       );
 
+  /// upload image wrapper using imageUploadService
   @action
   Future<bool> uploadEntryImage({
     required String filePath,
@@ -244,7 +255,7 @@ abstract class _AppState with Store {
       return false;
     }
 
-    //set the entry as loading while uploading the image
+    // set the entry in loading state while uploading the image
     final entry = entries.firstWhere(
       (element) => element.id == forEntryId,
     );
@@ -273,6 +284,7 @@ abstract class _AppState with Store {
     return true;
   }
 
+  /// remove image wrapper using imageUploadService
   @action
   Future<bool> removeEntryMedia({
     required EntryId forEntryId,
@@ -312,6 +324,7 @@ abstract class _AppState with Store {
     return true;
   }
 
+  /// get entry image wrapper using entriesService
   Future<Uint8List?> getEntryImage({
     required EntryId entryId,
   }) async {
@@ -339,7 +352,7 @@ abstract class _AppState with Store {
     return image;
   }
 
-  /// delete entry action
+  /// delete entry action using entriesService
   @action
   Future<bool> deleteEntry(
     Entry entry,
@@ -419,11 +432,13 @@ abstract class _AppState with Store {
   }
 }
 
+/// type definition for function used as parameter
 typedef LoginOrRegisterFunction = Future<bool> Function({
   required String email,
   required String password,
 });
 
+/// bool type extension returning int value depending on bool value
 extension ToInt on bool {
   int toInt() => this ? 1 : 0;
 }
@@ -443,4 +458,5 @@ extension Sorted on List<Entry> {
     );
 }
 
+/// enum containing screens list, used in routing
 enum AppScreen { login, register, journalEntries }

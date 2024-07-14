@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart' show immutable;
 typedef CloseLoadingScreen = bool Function();
 typedef UpdateLoadingScreen = bool Function(String text);
 
-/// Controller used with LoadingScreen singleton object to close or update it
+/// Controller used with LoadingScreen singleton
 @immutable
 class LoadingScreenController {
   final CloseLoadingScreen close;

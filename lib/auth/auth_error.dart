@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:flutter/foundation.dart' show immutable;
 
-/// Current module used for authentication actions and possible outputs
+/// Current module used for authentication errors and possible output
+/// AuthError class
 
 /// Errors map
+/// mapping error string (message) received from Firebase
+/// with exact error class implementation
+/// overriding base AuthError class
 const Map<String, AuthError> authErrorMapping = {
   'user-not-found': AuthErrorUserNotFound(),
   'weak-password': AuthErrorWeakPassword(),

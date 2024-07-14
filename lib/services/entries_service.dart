@@ -6,8 +6,10 @@ import 'package:iu_dlbcsemse02_task3_journal_app/state/entry.dart';
 /// typedef used to specify member type exactly as EntryID
 typedef EntryId = String;
 
-/// abstract entries service class, containing CRUD functions to implement
+/// abstract CRUD service class, containing functions to implement
+/// in under-layer
 abstract class EntriesService {
+  /// delete journal entry by id
   Future<void> deleteEntryById(
     EntryId id, {
     required String userId,
@@ -18,13 +20,15 @@ abstract class EntriesService {
     required String userId,
   });
 
+  /// create journal entry
   Future<EntryId> createEntry({
     required String userId,
     required String text,
     required DateTime creationDate,
   });
 
-  Future<void> modifyEntry({
+  /// update entry
+  Future<void> updateEntry({
     required String userId,
     required EntryId entryId,
     String? entryText,
@@ -43,6 +47,7 @@ abstract class EntriesService {
     required bool hasImage,
   });
 
+  /// get image assigned with entry
   Future<Uint8List?> getEntryImage({
     required EntryId entryId,
     required String userId,
@@ -149,31 +154,9 @@ class FirestoreEntriesService implements EntriesService {
     return entries;
   }
 
-  /// update the remote Firebase entry
-  Future<void> _modify({
-    required EntryId entryId,
-    required String userId,
-    required Map<String, Object?> keyValues,
-  }) async {
-    // get docs by userid
-    final collection =
-        await FirebaseFirestore.instance.collection(userId).get();
-
-    // find entry by id
-    final firebaseEntry = collection.docs
-        .where((element) => element.id == entryId)
-        .first
-        .reference;
-
-    // update entry using key-value map keyValues
-    await firebaseEntry.update(
-      keyValues,
-    );
-  }
-
   /// entry update wrapper
   @override
-  Future<void> modifyEntry({
+  Future<void> updateEntry({
     required String userId,
     required EntryId entryId,
     String? entryText,
@@ -198,6 +181,28 @@ class FirestoreEntriesService implements EntriesService {
         },
       );
     }
+  }
+
+  /// update the remote Firebase entry
+  Future<void> _modify({
+    required EntryId entryId,
+    required String userId,
+    required Map<String, Object?> keyValues,
+  }) async {
+    // get docs by userid
+    final collection =
+        await FirebaseFirestore.instance.collection(userId).get();
+
+    // find entry by id
+    final firebaseEntry = collection.docs
+        .where((element) => element.id == entryId)
+        .first
+        .reference;
+
+    // update entry using key-value map keyValues
+    await firebaseEntry.update(
+      keyValues,
+    );
   }
 
   /// image object getter from FirebaseStorage
@@ -232,6 +237,7 @@ class FirestoreEntriesService implements EntriesService {
 }
 
 /// definition of document fields
+/// expandable in case additional fields required
 abstract class _DocumentKeys {
   static const text = 'text';
   static const creationDate = 'creation_date';

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 typedef DialogOptionBuilder<T> = Map<String, T?> Function();
 
-/// generic dialog widget used in different app parts
+/// generic dialog widget base class
+/// used for different dialogs
 Future<T?> showGenericDialog<T>({
   required BuildContext context,
   required String title,

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/auth/auth_error.dart';
 
 /// abstract class AuthService used as parent for
-/// exact Firebase auth actions
+/// Firebase implementation of auth actions
 abstract class AuthService {
   String? get userId;
   Future<bool> deleteAccountAndSignOut();
@@ -77,6 +77,7 @@ class FirebaseAuthService implements AuthService {
     return FirebaseAuth.instance.currentUser != null;
   }
 
+  /// user sign-out
   @override
   Future<void> signOut() async {
     try {
@@ -87,6 +88,7 @@ class FirebaseAuthService implements AuthService {
     }
   }
 
+  /// user ID getter
   @override
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
 }

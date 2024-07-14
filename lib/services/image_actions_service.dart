@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 typedef ImageID = String;
 
 /// abstract class ImageUploadService used as parent for
-/// exact Firebase-putFile action
+/// exact Firebase actions
 abstract class ImageService {
   Future<ImageID?> uploadImageToRemote({
     required String filePath,
@@ -19,7 +19,7 @@ abstract class ImageService {
   });
 }
 
-/// Firebase-putFile action implementation
+/// upload image to Firebase
 class FirebaseImageService implements ImageService {
   @override
   Future<ImageID?> uploadImageToRemote({
@@ -40,6 +40,7 @@ class FirebaseImageService implements ImageService {
         .catchError((_) => null);
   }
 
+  /// remove image from Firebase
   @override
   Future<void> removeImageFromRemote(
       {required String userId, required String entryId}) async {

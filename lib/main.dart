@@ -14,11 +14,17 @@ import 'package:iu_dlbcsemse02_task3_journal_app/views/register_view.dart';
 import 'package:iu_dlbcsemse02_task3_journal_app/views/entries_view.dart';
 import 'package:provider/provider.dart';
 
+/// main program entry point
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Firebase initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  /// Provider wrapping services to allow access
+  /// to them from anywhere in app
   runApp(
     Provider(
       create: (_) => AppState(
@@ -42,7 +48,12 @@ class App extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: ReactionBuilder(
+      home:
+
+          /// ReactionBuilder is part of the core MobX state control
+          /// fires whenever the dependent observables change
+          /// i.e. showing LoadingScreen in case AppState changed to isLoading
+          ReactionBuilder(
         builder: (context) {
           return autorun(
             (_) {
@@ -68,6 +79,9 @@ class App extends StatelessWidget {
             },
           );
         },
+
+        /// MobX Observer used to route between screens
+        /// depending on AppState.currentScreen getter
         child: Observer(
           name: 'CurrentScreen',
           builder: (context) {

@@ -9,6 +9,8 @@ enum MenuAction {
   deleteAccount,
 }
 
+/// pop-up menu
+/// in top-right screen corner
 class MainPopupMenuButton extends StatelessWidget {
   const MainPopupMenuButton({super.key});
 

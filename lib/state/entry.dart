@@ -6,7 +6,7 @@ part 'entry.g.dart';
 /// Model for journal entry
 class Entry = _Entry with _$Entry;
 
-/// Entry with Store mixin to support code generation
+/// Entry with Store mixin to support MobX code generation
 abstract class _Entry with Store {
   final String id;
   final DateTime creationDate;

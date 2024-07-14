@@ -81,7 +81,7 @@ class MockEntriesService implements EntriesService {
       mockEntrys.toFuture(oneSecond);
 
   @override
-  Future<void> modifyEntry({
+  Future<void> updateEntry({
     required String userId,
     required EntryId entryId,
     String? entryText,

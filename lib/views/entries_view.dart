@@ -5,6 +5,9 @@ import 'package:iu_dlbcsemse02_task3_journal_app/views/main_popup_menu_button.da
 import 'package:iu_dlbcsemse02_task3_journal_app/views/entries_list_view.dart';
 import 'package:provider/provider.dart';
 
+/// main screen base scaffold
+/// containing AppBar, Floating Action Bar (FAB)
+/// and entries list view
 class EntriesView extends StatelessWidget {
   const EntriesView({super.key});
 
@@ -12,7 +15,7 @@ class EntriesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo-s journal entries'),
+        title: const Text('ToDo-s Journal entries'),
         actions: const [
           MainPopupMenuButton(),
         ],

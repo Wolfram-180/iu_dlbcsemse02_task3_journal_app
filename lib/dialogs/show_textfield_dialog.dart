@@ -6,7 +6,7 @@ enum TextFieldDialogButtonType {
   confirm,
 }
 
-//TODO: add doc
+/// dialog options mapping function
 typedef DialogOptionBuilder = Map<TextFieldDialogButtonType, String> Function();
 
 final controller = TextEditingController();
