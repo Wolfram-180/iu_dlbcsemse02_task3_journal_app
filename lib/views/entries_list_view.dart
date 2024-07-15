@@ -33,7 +33,9 @@ class EntriesListView extends StatelessWidget {
   }
 }
 
-/// ebtry widget
+/// entry widget
+/// containing checkbox, rows with buttons, entry text and image
+/// wrapped in MobX Observer to react on changes
 class EntryTile extends StatelessWidget {
   final int entryIndex;
   final ImagePicker imagePicker;
