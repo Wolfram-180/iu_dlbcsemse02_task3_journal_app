@@ -5,11 +5,35 @@ import 'package:iu_dlbcsemse02_task3_journal_app/views/main_popup_menu_button.da
 import 'package:iu_dlbcsemse02_task3_journal_app/views/entries_list_view.dart';
 import 'package:provider/provider.dart';
 
-/// main screen base scaffold
+/// Main screen base scaffold
 /// containing AppBar, Floating Action Bar (FAB)
 /// and entries list view
-class EntriesView extends StatelessWidget {
+class EntriesView extends StatefulWidget {
   const EntriesView({super.key});
+
+  @override
+  _EntriesViewState createState() => _EntriesViewState();
+}
+
+class _EntriesViewState extends State<EntriesView> {
+  Future<void> _addEntry() async {
+    // capturing context locally to avoid issues with async gaps
+    final localContext = context;
+    final entryText = await showTextFieldDialog(
+      context: localContext,
+      title: 'What is entry about?',
+      hintText: 'Enter your journal entry here',
+      optionsBuilder: () => {
+        TextFieldDialogButtonType.cancel: 'Cancel',
+        TextFieldDialogButtonType.confirm: 'Save',
+      },
+    );
+    if (!mounted) return;
+    if (entryText == null) {
+      return;
+    }
+    context.read<AppState>().createEntry(entryText);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +47,7 @@ class EntriesView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(82, 170, 94, 1.0),
         tooltip: 'Add entry',
-        onPressed: () async {
-          final entryText = await showTextFieldDialog(
-            context: context,
-            title: 'What is entry about?',
-            hintText: 'Enter your journal entry here',
-            optionsBuilder: () => {
-              TextFieldDialogButtonType.cancel: 'Cancel',
-              TextFieldDialogButtonType.confirm: 'Save',
-            },
-          );
-          if (entryText == null) {
-            return;
-          }
-          context.read<AppState>().createEntry(entryText);
-        },
+        onPressed: _addEntry,
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       body: const EntriesListView(),
